@@ -3,22 +3,31 @@ package graph;
 import java.util.List;
 
 public class Node {
-    int id;
-    String name;
-    List<Edge> edges;
+    private int id;
+    private String name;
+    private List<Edge> edges;
 
     public Node() {
     }
 
-    public Node(int id, String name) {
+    public Node (int id, String name) {
         this.id = id;
         this.name = name;
     }
 
-    public Node(int id, String name, List<Edge> edges) {
+    public Node (int id, String name, List<Edge> edges) {
         this.id = id;
         this.name = name;
         this.edges = edges;
+    }
+
+    public void addVector (Node node, int weight){ //directional edge
+        edges.add(new Edge(this,node,weight));
+    }
+
+    public void addEdge (Node node, int weight){ //undirectional edge
+        edges.add(new Edge(this,node,weight));
+        node.getEdges().add(new Edge(node,this,weight));
     }
 
     public int getId() {
@@ -43,5 +52,10 @@ public class Node {
 
     public void setEdges(List<Edge> edges) {
         this.edges = edges;
+    }
+
+    @Override
+    public String toString() {
+        return name + "("+id+")";
     }
 }
