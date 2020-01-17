@@ -1,41 +1,46 @@
 package graph;
 
+import java.util.ArrayList;
 import java.util.List;
 
 public class Node {
-    private int id;
+    private int index;
     private String name;
     private List<Edge> edges;
 
     public Node() {
     }
 
-    public Node (int id, String name) {
-        this.id = id;
+    public Node (String name) {
         this.name = name;
+        this.index = -1;
+        this.edges = new ArrayList<>();
     }
 
-    public Node (int id, String name, List<Edge> edges) {
-        this.id = id;
-        this.name = name;
-        this.edges = edges;
+    public void addVector (Node node){ //directional edge
+        edges.add(new Edge(this,node));
     }
 
-    public void addVector (Node node, int weight){ //directional edge
+    public void addVector (Node node, float weight){ //directional edge
         edges.add(new Edge(this,node,weight));
     }
 
-    public void addEdge (Node node, int weight){ //undirectional edge
+    public void addEdge (Node node){ //undirectional edge
+        edges.add(new Edge(this,node));
+        node.getEdges().add(new Edge(node,this));
+    }
+
+    public void addEdge (Node node, float weight){ //undirectional edge
         edges.add(new Edge(this,node,weight));
         node.getEdges().add(new Edge(node,this,weight));
     }
 
-    public int getId() {
-        return id;
+    public int getIndex() {
+        return index;
     }
 
-    public void setId(int id) {
-        this.id = id;
+    public void setIndex(int id) {
+        this.index = id;
     }
 
     public String getName() {
@@ -56,6 +61,10 @@ public class Node {
 
     @Override
     public String toString() {
-        return name + "("+id+")";
+        StringBuilder s = new StringBuilder(name + "(" + index + ") ");
+        for (Edge e : edges) {
+            s.append(" >").append(e.getEnd().getIndex()).append("[").append(e.getDistance()).append("]");
+        }
+        return s.toString();
     }
 }

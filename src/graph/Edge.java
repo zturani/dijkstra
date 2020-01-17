@@ -3,15 +3,21 @@ package graph;
 public class Edge {
     private Node start;
     private Node end;
-    private int weight;
+    private float distance;
 
     public Edge() {
     }
 
-    public Edge(Node start, Node end, int weight) {
+    public Edge(Node start, Node end) {
         this.start = start;
         this.end = end;
-        this.weight = weight;
+        this.distance = -1;
+    }
+
+    public Edge(Node start, Node end, float distance) {
+        this.start = start;
+        this.end = end;
+        this.distance = distance;
     }
 
     public Node getStart() {
@@ -30,17 +36,17 @@ public class Edge {
         this.end = end;
     }
 
-    public int getWeight() {
-        return weight;
+    public float getDistance() {
+        return distance;
     }
 
-    public void setWeight(int weight) {
-        this.weight = weight;
+    public void setDistance(float distance) {
+        this.distance = distance;
     }
 
     @Override
     public String toString() {
-        return "{" + start.getId() + ">" + end.getId() +
-                "(" + weight + ")}";
+        return "{" + start.getIndex() + ">" + end.getIndex() +
+                "(" + distance + ")}";
     }
 }
