@@ -9,7 +9,6 @@ import java.util.Scanner;
 
 public class Main {
 
-
     public static void main(String[] args) {
 
         Graph graph = new Graph("Test", false, true);
@@ -32,6 +31,9 @@ public class Main {
         System.out.println(graph.hasEdge(1, 3));
         System.out.print(graph.toString());
 
-        graph.runDijkstra(graph.getNodeByName("a"), graph.getNodeByName("e"));
+        graph.dijkstra(graph.getNodeByName("a"));
+        graph.printDistanceTable();
+        System.out.println("Distance to e: "+graph.getNodeByName("e").getDistance());
+        System.out.println("Route to e: "+graph.getRoute(graph.getNodeByName("e")));
     }
 }

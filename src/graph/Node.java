@@ -7,6 +7,8 @@ public class Node {
     private int index;
     private String name;
     private List<Edge> edges;
+    private float distance;
+    private Node previous;
 
     public Node() {
     }
@@ -57,6 +59,22 @@ public class Node {
 
     public void setEdges(List<Edge> edges) {
         this.edges = edges;
+    }
+
+    public float getDistance() {
+        return distance;
+    }
+
+    public void setDistance(float distance) {
+        this.distance = distance;
+    }
+
+    public Node getPrevious() {
+        return previous;
+    }
+
+    public void setPrevious(Node previous) {
+        this.previous = previous;
     }
 
     @Override

@@ -9,6 +9,7 @@ public class Graph {
     private boolean directed;
     private boolean weighted;
     private int numNodes;
+    private Node startNode;
     private List<Node> nodes;
     public static float INF = Float.POSITIVE_INFINITY;
 
@@ -76,7 +77,7 @@ public class Graph {
         return has;
     }
 
-    public Node getNodeByName (String name) {
+    public Node getNodeByName(String name) {
         Node node = null;
         for (Node n : nodes) {
             if (n.getName().equalsIgnoreCase(name)) {
@@ -86,76 +87,71 @@ public class Graph {
         return node;
     }
 
-    public Node getNodeByIndex (int index) {
+    public Node getNodeByIndex(int index) {
         Node node = null;
         for (Node n : nodes) {
-            if (n.getIndex()==index) {
+            if (n.getIndex() == index) {
                 node = n;
             }
         }
         return node;
     }
 
-    public void runDijkstra(Node start, Node dest) {
+    public void dijkstra(Node start) {
 
-        DijkstraTable dkt = new DijkstraTable();
-        dkt.distance[start.getIndex()] = 0;
-        dkt.previous[start.getIndex()] = start;
-        Node currentNode;
+        startNode = start;
+        List<Node> visited = new ArrayList<>();
+        List<Node> unvisited = new ArrayList<>(nodes);
 
-        while  (dkt.unvisited.size()>0) {
-            currentNode = dkt.getShortestDstNode();
-            for (Edge edge : currentNode.getEdges()) {
-                float dist = dkt.distance[currentNode.getIndex()] + edge.getDistance(); //current node distance + edge distance
-                int index = edge.getEnd().getIndex();
-                if (dist<dkt.distance[index]) { //if distance is shorter, update distance and previous node
-                    dkt.distance[index] = dist;
-                    dkt.previous[index] = currentNode;
-                }
-            }
-            dkt.unvisited.remove(currentNode);
-            dkt.visited.add(currentNode);
+        for (Node n : nodes) {
+            n.setDistance(INF);
         }
 
-        for (int i = 0; i < dkt.vertex.length; i++) {
-            System.out.println(dkt.vertex[i].getName()+"("+i+") "+dkt.distance[i]+" - "+dkt.previous[i].getName());
+        startNode.setPrevious(start);
+        startNode.setDistance(0);
+        Node currentNode = start;
+
+        while (unvisited.size() > 0) {
+            float min = INF;
+
+            for (Node n : unvisited) { //get closest node
+                if (n.getDistance() < min) {
+                    currentNode = n;
+                    min = n.getDistance();
+                }
+            }
+
+            for (Edge e : currentNode.getEdges()) {
+                float dist = currentNode.getDistance() + e.getDistance(); //current node distance + edge distance
+                Node endNode = e.getEnd();
+                if (dist < endNode.getDistance()) {
+                    endNode.setDistance(dist);
+                    endNode.setPrevious(currentNode);
+                }
+            }
+            unvisited.remove(currentNode);
+            visited.add(currentNode);
         }
     }
 
-
-
-    private class DijkstraTable {
-        protected Node[] vertex, previous;
-        protected float[] distance;
-        protected List<Node> visited, unvisited;
-        protected int index;
-
-        public DijkstraTable() {
-            vertex = new Node[getNumNodes()];
-            previous = new Node[getNumNodes()];
-            distance = new float[getNumNodes()];
-            visited = new ArrayList<>();
-            unvisited = getNodes();
-
-            for (int i = 0; i < vertex.length; i++) {
-                vertex[i] = unvisited.get(i);
-                vertex[i].setIndex(i); //making sure indexes correspond
-                distance[i] = INF;
-            }
+    public void printDistanceTable() {
+        for (Node n : nodes) {
+            System.out.println(n.getName() + "(" + n.getIndex() + ") " + n.getDistance() + " - " + n.getPrevious().getName());
         }
+    }
 
-        protected Node getShortestDstNode() {
-            Node node = null;
-            float min = INF;
-
-            for (Node n : unvisited) {
-                if (distance[n.getIndex()] < min) {
-                    node = n;
-                    min = distance[n.getIndex()];
-                }
-            }
-            return node;
+    public String getRoute(Node node) {
+        List<Node> route = new ArrayList<>();
+        while (node != startNode) {
+            route.add(node);
+            node = node.getPrevious();
         }
+        StringBuilder s = new StringBuilder();
+        s.append(startNode.getName());
+        for (int i = route.size() - 1; i >= 0; i--) {
+            s.append("-").append(route.get(i).getName());
+        }
+        return s.toString();
     }
 
     public String getName() {
@@ -200,7 +196,7 @@ public class Graph {
         for (Node n : nodes) {
             s.append(n.toString()).append("\n");
         }
-        s.append("}");
+        s.append("}\n");
         return s.toString();
     }
 }
