@@ -135,8 +135,10 @@ public class Graph {
     }
 
     public void printDistanceTable() {
+        System.out.println("Start node: "+startNode.getName());
+        System.out.println("node|dist|prev");
         for (Node n : nodes) {
-            System.out.println(n.getName() + "(" + n.getIndex() + ") " + n.getDistance() + " - " + n.getPrevious().getName());
+            System.out.println(n.getName() + "(" + n.getIndex() + ") " + n.getDistance() + "  " + n.getPrevious().getName());
         }
     }
 
