@@ -1,2 +1,2 @@
 # dijkstra
-Simple JAVA implementation
+Simple JAVA implementation of the Dijkstra algorithm
